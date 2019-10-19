@@ -57,6 +57,7 @@ import java.util.Collections;
 
 
 @TeleOp(name="Jed Mode", group="Iterative Opmode")
+@Disabled
 public class exampleCodeJed extends OpMode
 {
     // Declare OpMode members.
