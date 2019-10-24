@@ -1444,6 +1444,23 @@ public class AutoLib {
         }
 
     }
+    //Creeper, aw man It's time to go get your revenge
+    //So we back in the mine, got our pick axe swinging from side to side, day and night
+    static public class Left extends ConcurrentSequence {
+
+        public Left(DcMotor fr, DcMotor br, DcMotor fl, DcMotor bl, double rightPower, double leftPower, double seconds, boolean stop)
+        {
+            if (fr != null)
+                this.add(new TimedMotorStep(fr, rightPower, seconds, stop));
+            if (br != null)
+                this.add(new TimedMotorStep(br, rightPower, seconds, stop));
+            if (fl != null)
+                this.add(new TimedMotorStep(fl, leftPower, seconds, stop));
+            if (bl != null)
+                this.add(new TimedMotorStep(bl, leftPower, seconds, stop));
+        }
+
+    }
 
 
     // a Sequence that moves an up-to-four-motor robot in a straight line with given power for given encoder count
