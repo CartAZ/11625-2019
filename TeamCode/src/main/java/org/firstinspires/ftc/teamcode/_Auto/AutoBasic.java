@@ -30,6 +30,7 @@ public class AutoBasic extends OpMode {
     DcMotor mFr, mBr, mFl, mBl;     // four drive motors (front right, back right, front left, back left)
     DcMotor mIo, mUd;               // two arm motors (in-out, up-down) OPTIONAL
 
+
     boolean debug = true;           // run in test/debug mode with dummy motors and data logging
     boolean haveEncoders = false;   // robot has Encoder-based motors
 
@@ -51,17 +52,22 @@ public class AutoBasic extends OpMode {
         mBr = mf.getDcMotor("br");
         mBl = mf.getDcMotor("bl");
 
+
         // OPTIONAL arm motors
         try {
             mIo = mf.getDcMotor("io");
             mUd = mf.getDcMotor("ud");
-        }
-        catch (IllegalArgumentException iax) {
+        } catch (IllegalArgumentException iax) {
             mIo = mUd = null;
         }
 
         mFl.setDirection(DcMotor.Direction.REVERSE);
         mBl.setDirection(DcMotor.Direction.REVERSE);
+
+
+
+
+
 
         // create the root Sequence for this autonomous OpMode
         mSequence = new AutoLib.LinearSequence();
