@@ -19,9 +19,9 @@ import org.firstinspires.ftc.teamcode._Libs.AutoLib;
 
 
 
-@Autonomous(name="AutoBasic", group ="Test")
+@Autonomous(name="AutoBasicLeft", group ="Test")
 //@Disabled
-public class AutoBasic extends OpMode {
+public class AutoBasicLeft extends OpMode {
 
     AutoLib.Sequence mSequence;     // the root of the sequence tree
     boolean bDone;                  // true when the programmed sequence is done
@@ -33,7 +33,7 @@ public class AutoBasic extends OpMode {
     boolean debug = true;           // run in test/debug mode with dummy motors and data logging
     boolean haveEncoders = false;   // robot has Encoder-based motors
 
-    public AutoBasic() {
+    public AutoBasicLeft() {
     }
 
     public void init() {
@@ -71,7 +71,7 @@ public class AutoBasic extends OpMode {
         //mSequence.add(new AutoLib.MoveByTimeStep(mFr, mBr, mFl, mBl, 0.5, 2.0, false));
 
         // Drives left?
-        //mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, .5,  2.0, false));
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, .5,  2.0, false));
         // create a second sequence that drives motors at different speeds
         // to turn left for 3 seconds, then stop all motors
         //mSequence.add(new AutoLib.TurnByTimeStep(mFr, mBr, mFl, mBl, 0.5, 0.2, 3.0, true));

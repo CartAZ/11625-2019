@@ -1445,19 +1445,19 @@ public class AutoLib {
 
     }
     //Creeper, aw man It's time to go get your revenge
-    //So we back in the mine, got our pick axe swinging from side to side, day and night
+    //So we back in the mine, got our pick axe swinging from side to side (side, side to side), day and night
     static public class SideToSide extends ConcurrentSequence {
 
-        public SideToSide(DcMotor fr, DcMotor br, DcMotor fl, DcMotor bl, double TLBRPower, double TRBLPower, double seconds, boolean stop)
+        public SideToSide(DcMotor fr, DcMotor br, DcMotor fl, DcMotor bl, double frontPower, double backPower, double seconds, boolean stop)
         {
             if (fr != null)
-                this.add(new TimedMotorStep(fr, TRBLPower, seconds, stop));
+                this.add(new TimedMotorStep(fr, frontPower, seconds, stop));
             if (br != null)
-                this.add(new TimedMotorStep(br, TLBRPower, seconds, stop));
+                this.add(new TimedMotorStep(br, backPower, seconds, stop));
             if (fl != null)
-                this.add(new TimedMotorStep(fl, TLBRPower, seconds, stop));
+                this.add(new TimedMotorStep(fl, frontPower, seconds, stop));
             if (bl != null)
-                this.add(new TimedMotorStep(bl, TRBLPower, seconds, stop));
+                this.add(new TimedMotorStep(bl, backPower, seconds, stop));
         }
     }
 
