@@ -30,7 +30,7 @@ public class AutoBasicLeft extends OpMode {
     DcMotor mFr, mBr, mFl, mBl;     // four drive motors (front right, back right, front left, back left)
     DcMotor mIo, mUd;               // two arm motors (in-out, up-down) OPTIONAL
 
-    boolean debug = true;           // run in test/debug mode with dummy motors and data logging
+    boolean debug = false;           // run in test/debug mode with dummy motors and data logging
     boolean haveEncoders = false;   // robot has Encoder-based motors
 
     public AutoBasicLeft() {
@@ -46,11 +46,16 @@ public class AutoBasicLeft extends OpMode {
 
         // get the motors: depending on the factory we created above, these may be
         // either dummy motors that just log data or real ones that drive the hardware
-        mFr = mf.getDcMotor("fr");
-        mFl = mf.getDcMotor("fl");
-        mBr = mf.getDcMotor("br");
-        mBl = mf.getDcMotor("bl");
 
+        try {
+            mFr = mf.getDcMotor("fr");
+            mFl = mf.getDcMotor("fl");
+            mBr = mf.getDcMotor("br");
+            mBl = mf.getDcMotor("bl");
+        }
+        catch(IllegalArgumentException iax){
+
+        }
         // OPTIONAL arm motors
         try {
             mIo = mf.getDcMotor("io");
@@ -67,11 +72,11 @@ public class AutoBasicLeft extends OpMode {
         mSequence = new AutoLib.LinearSequence();
 
         // add a Step (actually, a ConcurrentSequence under the covers) that
-        // drives all four motors forward at half power for 2 seconds
-        //mSequence.add(new AutoLib.MoveByTimeStep(mFr, mBr, mFl, mBl, 0.5, 2.0, false));
+        //        // drives all four motors forward at half power for 2 seconds
+        //        //mSequence.add(new AutoLib.MoveByTimeStep(mFr, mBr, mFl, mBl, 0.5, 2.0, false));
 
         // Drives left?
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, .5,  2.0, false));
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, -.5,  -.5, .5,  2.0, false));
         // create a second sequence that drives motors at different speeds
         // to turn left for 3 seconds, then stop all motors
         //mSequence.add(new AutoLib.TurnByTimeStep(mFr, mBr, mFl, mBl, 0.5, 0.2, 3.0, true));
