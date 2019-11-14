@@ -141,6 +141,14 @@ public class XDrive1Test extends OpMode {
 		float r1 = gamepad1.right_stick_x;
 		float y2 = -gamepad2.left_stick_y;
 
+		float x = gamepad1.left_stick_x;
+		float y = -gamepad1.left_stick_y;
+		float r = gamepad1.right_stick_x;
+		//lt = half speed
+		float lt = gamepad1.left_trigger;
+		//rt = 2x speed
+		float rt = gamepad1.right_trigger;
+
 		// clip the right/left values so that the values never exceed +/- 1
 		x1 = Range.clip(x1, -1, 1);
 		y1 = Range.clip(y1, -1, 1);
@@ -161,6 +169,7 @@ public class XDrive1Test extends OpMode {
 
 		float grabRotationIncrement = y2/10;
 		grabRotation += grabRotationIncrement;
+
 
 		if(Math.abs(fr) > 1 && Math.abs(fr) >= Math.abs(br) && Math.abs(fr) >= Math.abs(fl) && Math.abs(fr) >= Math.abs(bl)){
 			br = br / Math.abs(fr);
@@ -194,12 +203,28 @@ public class XDrive1Test extends OpMode {
 			grabRotation = 0;
 		}
 
+		fr /= 2;
+		br /= 2;
+		fl /= 2;
+		bl /= 2;
+
+		fr *= (1-(lt/2));
+		br *= (1-(lt/2));
+		fl *= (1-(lt/2));
+		bl *= (1-(lt/2));
+
+		fr *= (1+rt);
+		br *= (1+rt);
+		fl *= (1+rt);
+		bl *= (1+rt);
+
 		// write the values to the motors - for now, front and back motors on each side are set the same
 		if (!bDebugFR || !bDebugBR || !bDebugFL || !bDebugBL) {
 			motorFrontRight.setPower(fr);
 			motorBackRight.setPower(br);
 			motorFrontLeft.setPower(fl);
 			motorBackLeft.setPower(bl);
+
 			servoGrabber.setPosition(grabRotation);
        /*
        if(r != 0) {
@@ -249,6 +274,8 @@ public class XDrive1Test extends OpMode {
 		else{
 			telemetry.addData("back left pwr", String.format("not working"));
 		}
+		telemetry.addData("left trigger", String.format("%.2f",lt));
+		telemetry.addData("right trigger", String.format("%.2f",rt));
 		telemetry.addData("gamepad1", gamepad1);
 
 		if(!bDebugGrabber){
@@ -282,4 +309,6 @@ public class XDrive1Test extends OpMode {
 }
 
 //Bruh
+
+
 
