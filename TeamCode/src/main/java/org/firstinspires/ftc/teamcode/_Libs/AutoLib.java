@@ -1461,6 +1461,28 @@ public class AutoLib {
         }
     }
 
+    //Encoder to the side
+    static public class SideByEncoderStep extends ConcurrentSequence {
+
+        public SideByEncoderStep(DcMotor fr, DcMotor br, DcMotor fl, DcMotor bl, double power, int count, boolean stop)
+        {
+            if (fr != null)
+                this.add(new EncoderMotorStep(fr, -power, count, stop));
+            if (br != null)
+                this.add(new EncoderMotorStep(br, power, count, stop));
+            if (fl != null)
+                this.add(new EncoderMotorStep(fl, power, count, stop));
+            if (bl != null)
+                this.add(new EncoderMotorStep(bl, -power, count, stop));
+        }
+
+        public SideByEncoderStep(DcMotor motors[], double power, int count, boolean stop)
+        {
+            for (DcMotor em : motors)
+                if (em != null)
+                    this.add(new EncoderMotorStep(em, power, count, stop));
+        }
+    }
 
     // a Sequence that moves an up-to-four-motor robot in a straight line with given power for given encoder count
     static public class MoveByEncoderStep extends ConcurrentSequence {
@@ -1483,7 +1505,6 @@ public class AutoLib {
                 if (em != null)
                     this.add(new EncoderMotorStep(em, power, count, stop));
         }
-
     }
 
 
