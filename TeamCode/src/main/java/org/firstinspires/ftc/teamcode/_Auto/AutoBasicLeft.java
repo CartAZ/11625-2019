@@ -31,7 +31,7 @@ public class AutoBasicLeft extends OpMode {
     DcMotor mIo, mUd;               // two arm motors (in-out, up-down) OPTIONAL
 
     boolean debug = false;           // run in test/debug mode with dummy motors and data logging
-    boolean haveEncoders = false;   // robot has Encoder-based motors
+    boolean haveEncoders = true;   // robot has Encoder-based motors
 
     public AutoBasicLeft() {
     }
@@ -76,7 +76,8 @@ public class AutoBasicLeft extends OpMode {
         //        //mSequence.add(new AutoLib.MoveByTimeStep(mFr, mBr, mFl, mBl, 0.5, 2.0, false));
 
         // Drives left?
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, -.5,  -.5, .5,  2.0, true));
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2, -.2,  -.2, .2,  2.3, true));
+        //mSequence.add(new AutoLib.SideByEncoderStep(mFr, mBr, mFl, mBl, 0.5, 2, true));
         // create a second sequence that drives motors at different speeds
         // to turn left for 3 seconds, then stop all motors
         //mSequence.add(new AutoLib.TurnByTimeStep(mFr, mBr, mFl, mBl, 0.5, 0.2, 3.0, true));

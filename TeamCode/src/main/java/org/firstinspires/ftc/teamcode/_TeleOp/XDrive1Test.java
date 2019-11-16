@@ -54,6 +54,7 @@ public class XDrive1Test extends OpMode {
 	DcMotor motorFrontLeft;
 	DcMotor motorBackRight;
 	DcMotor motorBackLeft;
+	//DcMotor motorArm;
 	Servo servoGrabber;
 
 
@@ -61,8 +62,11 @@ public class XDrive1Test extends OpMode {
 	boolean bDebugFL = false;
 	boolean bDebugBR = false;
 	boolean bDebugBL = false;
+	boolean bDebugArm = false;
 	boolean bDebugGrabber = false;
+	boolean dontTurn = false;
 
+	float armRotation = 0;
 	float grabRotation = 0;
 
 	/**
@@ -118,6 +122,15 @@ public class XDrive1Test extends OpMode {
 		catch (IllegalArgumentException iax) {
 			bDebugBL = true;
 		}
+		/*
+		try{
+			//motorArm = hardwareMap.dcMotor.get("arm");
+		}
+		catch(IllegalArgumentException iax){
+			bDebugArm = true;
+		}
+
+		 */
 		try{
 			servoGrabber = hardwareMap.servo.get("grab");
 		}
@@ -140,10 +153,8 @@ public class XDrive1Test extends OpMode {
 		float y1 = -gamepad1.left_stick_y;
 		float r1 = gamepad1.right_stick_x;
 		float y2 = -gamepad2.left_stick_y;
+		float y3 = -gamepad2.right_stick_y;
 
-		float x = gamepad1.left_stick_x;
-		float y = -gamepad1.left_stick_y;
-		float r = gamepad1.right_stick_x;
 		//lt = half speed
 		float lt = gamepad1.left_trigger;
 		//rt = 2x speed
@@ -154,6 +165,7 @@ public class XDrive1Test extends OpMode {
 		y1 = Range.clip(y1, -1, 1);
 		r1 = Range.clip(r1, -1, 1);
 		y2 = Range.clip(y2, -1, 1);
+		y3 = Range.clip(y3, -1, 1);
 
 		// scale the joystick value to make it easier to control
 		// the robot more precisely at slower speeds.
@@ -161,11 +173,15 @@ public class XDrive1Test extends OpMode {
 		y1 = (float)scaleInput(y1);
 		r1 = (float)scaleInput(r1);
 		y2 = (float)scaleInput(y2);
+		y3 = (float)scaleInput(y3);
 
 		float fr = (y1-x1)-r1;
 		float br = (y1+x1)-r1;
 		float fl = (y1+x1+r1);
 		float bl = (y1-x1)+r1;
+
+		float armRotationIncrement = y3;
+		armRotation += armRotationIncrement;
 
 		float grabRotationIncrement = y2/10;
 		grabRotation += grabRotationIncrement;
@@ -196,8 +212,20 @@ public class XDrive1Test extends OpMode {
 			bl = bl / Math.abs(bl);
 		}
 
-		if(grabRotation > 1){
-			grabRotation = 1;
+		if(armRotation >= 10){
+			armRotation = 10;
+			dontTurn = true;
+		}
+		else if(armRotation <= 0){
+			armRotation = 0;
+			dontTurn = true;
+		}
+		else{
+			dontTurn = false;
+		}
+
+		if(grabRotation > .5f){
+			grabRotation = .5f;
 		}
 		else if(grabRotation < 0){
 			grabRotation = 0;
@@ -218,24 +246,54 @@ public class XDrive1Test extends OpMode {
 		fl *= (1+rt);
 		bl *= (1+rt);
 
+		float arm = y3/10;
+
 		// write the values to the motors - for now, front and back motors on each side are set the same
 		if (!bDebugFR || !bDebugBR || !bDebugFL || !bDebugBL) {
-			motorFrontRight.setPower(fr);
-			motorBackRight.setPower(br);
-			motorFrontLeft.setPower(fl);
-			motorBackLeft.setPower(bl);
-
+			if(fr == 0){
+				motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+			}
+			else{
+				motorFrontRight.setPower(fr);
+			}
+			if(br == 0){
+				motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+			}
+			else{
+				motorBackRight.setPower(br);
+			}
+			if(fl == 0){
+				motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+			}
+			else{
+				motorFrontLeft.setPower(fl);
+			}
+			if(bl == 0){
+				motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+			}
+			else{
+				motorBackLeft.setPower(bl);
+			}
+/*
+			if(dontTurn = true || arm == 0){
+				motorArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+			}
+			else if(dontTurn = false){
+				motorArm.setPower(arm);
+			}
+*/
 			servoGrabber.setPosition(grabRotation);
-       /*
-       if(r != 0) {
-          x = 0;
-          y = 0;
-          motorFrontRight.setPower(-r);
-          motorBackRight.setPower(-r);
-          motorFrontLeft.setPower(r);
-          motorBackLeft.setPower(r);
-       }
-        */
+
+      /*
+      if(r != 0) {
+         x = 0;
+         y = 0;
+         motorFrontRight.setPower(-r);
+         motorBackRight.setPower(-r);
+         motorFrontLeft.setPower(r);
+         motorBackLeft.setPower(r);
+      }
+       */
 		}
 
 		/*
@@ -284,6 +342,12 @@ public class XDrive1Test extends OpMode {
 		else{
 			telemetry.addData("grabber rotation", String.format("not working"));
 		}
+		if(!bDebugArm){
+			telemetry.addData("arm rotation", String.format("%.2f",armRotation));
+		}
+		else{
+			telemetry.addData("arm rotation", String.format("&.2f",grabRotation));
+		}
 		telemetry.addData("gamepad2", gamepad2);
 	}
 
@@ -309,6 +373,8 @@ public class XDrive1Test extends OpMode {
 }
 
 //Bruh
+
+
 
 
 
