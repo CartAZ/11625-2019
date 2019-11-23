@@ -209,7 +209,7 @@ public class XDrive1Test extends OpMode {
 			fl = fl / Math.abs(bl);
 			bl = bl / Math.abs(bl);
 		}
-
+/*
 		if(armRotation >= 10){
 			armRotation = 10;
 			dontTurn = true;
@@ -221,6 +221,9 @@ public class XDrive1Test extends OpMode {
 		else{
 			dontTurn = false;
 		}
+
+ */
+		dontTurn = false;
 
 		if(grabRotation > .5f){
 			grabRotation = .5f;
@@ -244,7 +247,7 @@ public class XDrive1Test extends OpMode {
 		fl *= (1+rt);
 		bl *= (1+rt);
 
-		float arm = y3/10;
+		float arm = y3/3;
 
 		// write the values to the motors - for now, front and back motors on each side are set the same
 		if (!bDebugFR || !bDebugBR || !bDebugFL || !bDebugBL) {
@@ -272,13 +275,16 @@ public class XDrive1Test extends OpMode {
 			else{
 				motorBackLeft.setPower(bl);
 			}
-
+/*
 			if(dontTurn = true || arm == 0){
 				motorArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 			}
 			else if(dontTurn = false){
 				motorArm.setPower(arm);
 			}
+
+ */
+			motorArm.setPower(arm);
 
 			servoGrabber.setPosition(grabRotation);
 
