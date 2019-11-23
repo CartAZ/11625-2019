@@ -54,7 +54,7 @@ public class XDrive1Test extends OpMode {
 	DcMotor motorFrontLeft;
 	DcMotor motorBackRight;
 	DcMotor motorBackLeft;
-	//DcMotor motorArm;
+	DcMotor motorArm;
 	Servo servoGrabber;
 
 
@@ -122,15 +122,13 @@ public class XDrive1Test extends OpMode {
 		catch (IllegalArgumentException iax) {
 			bDebugBL = true;
 		}
-		/*
 		try{
-			//motorArm = hardwareMap.dcMotor.get("arm");
+			motorArm = hardwareMap.dcMotor.get("arm");
 		}
 		catch(IllegalArgumentException iax){
 			bDebugArm = true;
 		}
 
-		 */
 		try{
 			servoGrabber = hardwareMap.servo.get("grab");
 		}
@@ -274,14 +272,14 @@ public class XDrive1Test extends OpMode {
 			else{
 				motorBackLeft.setPower(bl);
 			}
-/*
+
 			if(dontTurn = true || arm == 0){
 				motorArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 			}
 			else if(dontTurn = false){
 				motorArm.setPower(arm);
 			}
-*/
+
 			servoGrabber.setPosition(grabRotation);
 
       /*
