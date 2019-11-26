@@ -247,7 +247,7 @@ public class XDrive1Test extends OpMode {
 		fl *= (1+rt);
 		bl *= (1+rt);
 
-		float arm = y3/3;
+		float arm = y3*2/3;
 
 		// write the values to the motors - for now, front and back motors on each side are set the same
 		if (!bDebugFR || !bDebugBR || !bDebugFL || !bDebugBL) {
