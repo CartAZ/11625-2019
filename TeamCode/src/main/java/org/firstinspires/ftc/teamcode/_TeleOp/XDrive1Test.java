@@ -155,8 +155,10 @@ public class XDrive1Test extends OpMode {
 
 		//lt = half speed
 		float lt = gamepad1.left_trigger;
+		float lt2 = gamepad2.left_trigger;
 		//rt = 2x speed
 		float rt = gamepad1.right_trigger;
+		float rt2 = gamepad2.right_trigger;
 
 		// clip the right/left values so that the values never exceed +/- 1
 		x1 = Range.clip(x1, -1, 1);
@@ -247,7 +249,9 @@ public class XDrive1Test extends OpMode {
 		fl *= (1+rt);
 		bl *= (1+rt);
 
-		float arm = y3*2/3;
+		float arm = y3;
+		arm *= (1-(lt2/2));
+
 
 		// write the values to the motors - for now, front and back motors on each side are set the same
 		if (!bDebugFR || !bDebugBR || !bDebugFL || !bDebugBL) {
