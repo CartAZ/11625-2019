@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode._Test._AutoLib;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode._Libs.AutoLib;
 import org.firstinspires.ftc.teamcode._Libs.SensorLib;
 
 // example of a base class for a bunch of Autonomous OpModes that all use the same (or nearly same) hardware
+@Disabled
 public class AutoOpModeBase extends OpMode {
 
     AutoLib.Sequence mSequence;             // the root of the sequence tree

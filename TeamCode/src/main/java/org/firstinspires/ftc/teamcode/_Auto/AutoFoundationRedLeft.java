@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode._Test._AutoLib;
+package org.firstinspires.ftc.teamcode._Auto;
 
 /**
  * OpMode to test AutoLib driving of motors by time or encoder counts
@@ -20,9 +20,9 @@ import org.firstinspires.ftc.teamcode._Libs.AutoLib;
 
 
 
-@Autonomous(name="Test: AutoLib Motor Step Test 1", group ="Test")
-@Disabled
-public class AutoMotorTest1 extends OpMode {
+@Autonomous(name="AutoFoundationRedLeft", group ="Test")
+//@Disabled
+public class AutoFoundationRedLeft extends OpMode {
 
     AutoLib.Sequence mSequence;     // the root of the sequence tree
     boolean bDone;                  // true when the programmed sequence is done
@@ -31,10 +31,10 @@ public class AutoMotorTest1 extends OpMode {
     DcMotor mFr, mBr, mFl, mBl;     // four drive motors (front right, back right, front left, back left)
     DcMotor mIo, mUd;               // two arm motors (in-out, up-down) OPTIONAL
 
-    boolean debug = true;           // run in test/debug mode with dummy motors and data logging
-    boolean haveEncoders = false;   // robot has Encoder-based motors
+    boolean debug = false;           // run in test/debug mode with dummy motors and data logging
+    boolean haveEncoders = true;   // robot has Encoder-based motors
 
-    public AutoMotorTest1() {
+    public AutoFoundationRedLeft() {
     }
 
     public void init() {
@@ -47,11 +47,16 @@ public class AutoMotorTest1 extends OpMode {
 
         // get the motors: depending on the factory we created above, these may be
         // either dummy motors that just log data or real ones that drive the hardware
-        mFr = mf.getDcMotor("fr");
-        mFl = mf.getDcMotor("fl");
-        mBr = mf.getDcMotor("br");
-        mBl = mf.getDcMotor("bl");
 
+        try {
+            mFr = mf.getDcMotor("fr");
+            mFl = mf.getDcMotor("fl");
+            mBr = mf.getDcMotor("br");
+            mBl = mf.getDcMotor("bl");
+        }
+        catch(IllegalArgumentException iax){
+
+        }
         // OPTIONAL arm motors
         try {
             mIo = mf.getDcMotor("io");
@@ -67,23 +72,29 @@ public class AutoMotorTest1 extends OpMode {
         // create the root Sequence for this autonomous OpMode
         mSequence = new AutoLib.LinearSequence();
 
-        // add a Step (actually, a ConcurrentSequence under the covers) that
-        // drives all four motors forward at half power for 2 seconds
-        mSequence.add(new AutoLib.MoveByTimeStep(mFr, mBr, mFl, mBl, 0.5, 2.0, false));
+        // === MAIN DRIVE STUFF ===
+        // Drives forward
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, .5,  .5, .5,  2.3, true));
+        // Wait
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,0, 0,  0, 0,  1, true));
+        // Rotates 90 degrees clockwise
+        mSequence.add(new AutoLib.TurnByTimeStep(mFr, mBr, mFl, mBl,-.2, .2,  .5, true));
+        // Wait
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,0, 0,  0, 0,  1, true));
 
-        // create a second sequence that drives motors at different speeds
-        // to turn left for 3 seconds, then stop all motors
-        mSequence.add(new AutoLib.TurnByTimeStep(mFr, mBr, mFl, mBl, 0.5, 0.2, 3.0, true));
+//        // Raise the arm using encoders while also extending it for 1 second
+//        AutoLib.ConcurrentSequence cs1 = new AutoLib.ConcurrentSequence();
+//        if (mUd != null && (debug || !haveEncoders))
+//            cs1.add(new AutoLib.TimedMotorStep(mUd, 0.75, 1.0, true)); // we don't support encoders yet in debug mode
+//        //else
+//        //    cs1.add(new AutoLib.EncoderMotorStep(new EncoderMotor(mUd), 0.75, 1000, true));
+//        if (mIo != null)
+//            cs1.add(new AutoLib.TimedMotorStep(mIo, 0.5, 1.0, true));
+//        mSequence.add(cs1);
+//
+        // Drives back to pull foundation
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,-.5, -.5,  -.5, -.5,  2.3, true));
 
-        // raise the arm using encoders while also extending it for 1 second
-        AutoLib.ConcurrentSequence cs1 = new AutoLib.ConcurrentSequence();
-        if (mUd != null && (debug || !haveEncoders))
-            cs1.add(new AutoLib.TimedMotorStep(mUd, 0.75, 1.0, true)); // we don't support encoders yet in debug mode
-        //else
-        //    cs1.add(new AutoLib.EncoderMotorStep(new EncoderMotor(mUd), 0.75, 1000, true));
-        if (mIo != null)
-            cs1.add(new AutoLib.TimedMotorStep(mIo, 0.5, 1.0, true));
-        mSequence.add(cs1);
 
         // start out not-done, first time
         bDone = false;

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode._Test._AutoLib;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode._Libs.AutoLib;
@@ -52,7 +53,7 @@ class mySwitchStep extends AutoLib.SwitchStep {
 }
 
 @Autonomous(name="Test: AutoLib Switch Test", group ="Test")
-//@Disabled
+@Disabled
 public class AutoTest4 extends OpMode {
 
     AutoLib.Sequence mSequence;     // the root of the sequence tree
