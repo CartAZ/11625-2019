@@ -98,6 +98,7 @@ public class XDrive1Test extends OpMode {
 		 */
 		try {
 			motorFrontRight = hardwareMap.dcMotor.get("fr");
+			motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 		}
 		catch (IllegalArgumentException iax) {
 			bDebugFR = true;
@@ -105,12 +106,14 @@ public class XDrive1Test extends OpMode {
 		try{
 			motorFrontLeft = hardwareMap.dcMotor.get("fl");
 			motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
+			motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 		}
 		catch (IllegalArgumentException iax) {
 			bDebugFL = true;
 		}
 		try{
 			motorBackRight = hardwareMap.dcMotor.get("br");
+			motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 		}
 		catch (IllegalArgumentException iax) {
 			bDebugBR = true;
@@ -118,12 +121,15 @@ public class XDrive1Test extends OpMode {
 		try{
 			motorBackLeft = hardwareMap.dcMotor.get("bl");
 			motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
+			motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 		}
 		catch (IllegalArgumentException iax) {
 			bDebugBL = true;
 		}
 		try{
 			motorArm = hardwareMap.dcMotor.get("arm");
+			motorArm.getCurrentPosition();
+			motorArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 		}
 		catch(IllegalArgumentException iax){
 			bDebugArm = true;
@@ -157,6 +163,9 @@ public class XDrive1Test extends OpMode {
 		float lt = gamepad1.left_trigger;
 		//rt = 2x speed
 		float rt = gamepad1.right_trigger;
+
+		float lt2 = gamepad2.left_trigger;
+
 
 		// clip the right/left values so that the values never exceed +/- 1
 		x1 = Range.clip(x1, -1, 1);
@@ -247,57 +256,27 @@ public class XDrive1Test extends OpMode {
 		fl *= (1+rt);
 		bl *= (1+rt);
 
-		float arm = y3*2/3;
+		float arm = y3;
+		arm *= (1-(lt2/2));
 
-		// write the values to the motors - for now, front and back motors on each side are set the same
-		if (!bDebugFR || !bDebugBR || !bDebugFL || !bDebugBL) {
-			if(fr == 0){
-				motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-			}
-			else{
-				motorFrontRight.setPower(fr);
-			}
-			if(br == 0){
-				motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-			}
-			else{
-				motorBackRight.setPower(br);
-			}
-			if(fl == 0){
-				motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-			}
-			else{
-				motorFrontLeft.setPower(fl);
-			}
-			if(bl == 0){
-				motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-			}
-			else{
-				motorBackLeft.setPower(bl);
-			}
-/*
-			if(dontTurn = true || arm == 0){
-				motorArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-			}
-			else if(dontTurn = false){
-				motorArm.setPower(arm);
-			}
-
- */
+		//Writes values for motors and servos IF the motors/servos passed the try catch
+		if(!bDebugFR){
+			motorFrontRight.setPower(fr);
+		}
+		if(!bDebugBR){
+			motorBackRight.setPower(br);
+		}
+		if(!bDebugFL){
+			motorFrontLeft.setPower(fl);
+		}
+		if(!bDebugBL){
+			motorBackLeft.setPower(bl);
+		}
+		if(!bDebugArm){
 			motorArm.setPower(arm);
-
+		}
+		if(!bDebugGrabber){
 			servoGrabber.setPosition(grabRotation);
-
-      /*
-      if(r != 0) {
-         x = 0;
-         y = 0;
-         motorFrontRight.setPower(-r);
-         motorBackRight.setPower(-r);
-         motorFrontLeft.setPower(r);
-         motorBackLeft.setPower(r);
-      }
-       */
 		}
 
 		/*
