@@ -19,21 +19,24 @@ import org.firstinspires.ftc.teamcode._Libs.AutoLib;
 
 
 
-@Autonomous(name="AutoBasicLeft", group ="Test")
+@Autonomous(name="BluePull", group ="Test")
 //@Disabled
-public class AutoBasicLeft extends OpMode {
+public class BluePull extends OpMode {
+
+
+    //starting from top left
 
     AutoLib.Sequence mSequence;     // the root of the sequence tree
     boolean bDone;                  // true when the programmed sequence is done
     boolean bFirst;                 // true first time loop() is called
 
     DcMotor mFr, mBr, mFl, mBl;     // four drive motors (front right, back right, front left, back left)
-    DcMotor mIo, mUd;               // two arm motors (in-out, up-down) OPTIONAL
+    DcMotor mIo, mUd, mArm;               // two arm motors (in-out, up-down) OPTIONAL
 
     boolean debug = false;           // run in test/debug mode with dummy motors and data logging
     boolean haveEncoders = true;   // robot has Encoder-based motors
 
-    public AutoBasicLeft() {
+    public BluePull() {
     }
 
     public void init() {
@@ -58,6 +61,7 @@ public class AutoBasicLeft extends OpMode {
         }
         // OPTIONAL arm motors
         try {
+            mArm = mf.getDcMotor("arm");
             mIo = mf.getDcMotor("io");
             mUd = mf.getDcMotor("ud");
         }
@@ -75,8 +79,9 @@ public class AutoBasicLeft extends OpMode {
         //        // drives all four motors forward at half power for 2 seconds
         //        //mSequence.add(new AutoLib.MoveByTimeStep(mFr, mBr, mFl, mBl, 0.5, 2.0, false));
 
-        // Drives left?
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2, -.2,  -.2, .2,  2.3, true));
+        // Drives right?
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,-.2, .2,  .2, -.2,  5, true));
+        //3/5 feet per second with .2 power.
         //mSequence.add(new AutoLib.SideByEncoderStep(mFr, mBr, mFl, mBl, 0.5, 2, true));
         // create a second sequence that drives motors at different speeds
         // to turn left for 3 seconds, then stop all motors
@@ -84,13 +89,11 @@ public class AutoBasicLeft extends OpMode {
 
         // raise the arm using encoders while also extending it for 1 second
         AutoLib.ConcurrentSequence cs1 = new AutoLib.ConcurrentSequence();
-        if (mUd != null && (debug || !haveEncoders))
-            cs1.add(new AutoLib.TimedMotorStep(mUd, 0.75, 1.0, true)); // we don't support encoders yet in debug mode
+        if (mArm != null && (debug || !haveEncoders))
+            cs1.add(new AutoLib.TimedMotorStep(mArm, 1, 1.0, true)); // we don't support encoders yet in debug mode
         //else
         //    cs1.add(new AutoLib.EncoderMotorStep(new EncoderMotor(mUd), 0.75, 1000, true));
-        if (mIo != null)
-            cs1.add(new AutoLib.TimedMotorStep(mIo, 0.5, 1.0, true));
-        mSequence.add(cs1);
+
 
         // start out not-done, first time
         bDone = false;
